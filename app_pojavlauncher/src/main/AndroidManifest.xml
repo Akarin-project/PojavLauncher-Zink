@@ -32,8 +32,7 @@
         <meta-data 
             android:name="android.max_aspect"
             android:value="ratio_float"/>
-        <meta-data android:name="com.oculus.intent.category.VR" android:value="vr_only"/>
-        <meta-data android:name="com.oculus.supportedDevices" android:value="quest|quest2"/>
+        <meta-data android:name="com.yvr.intent.category.VR" android:value="vr_only"/>
         <activity
             android:exported="true"
             android:launchMode="singleTop"
@@ -106,7 +105,7 @@
             <meta-data android:name="com.oculus.ossplash" android:value="true"/>
             <intent-filter>
                 <action android:name="android.intent.action.RUN"/>
-                <category android:name="com.oculus.intent.category.VR"/>
+                <category android:name="com.yvr.intent.category.VR"/>
             </intent-filter>
         </activity>
         <provider

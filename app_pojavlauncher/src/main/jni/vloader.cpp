@@ -2,6 +2,7 @@
 // Created by Judge on 12/23/2021.
 //
 #include <thread>
+#include <dlfcn.h>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -24,6 +25,35 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
         jvm = vm;
     }
     return JNI_VERSION_1_4;
+}
+
+extern "C"
+JNIEXPORT void JNICALL
+Java_org_vivecraft_provider_VLoader_setEGL() {
+    static const EGLint attribs[] = {
+            EGL_RED_SIZE, 8,
+            EGL_GREEN_SIZE, 8,
+            EGL_BLUE_SIZE, 8,
+            EGL_ALPHA_SIZE, 8,
+            // Minecraft required on initial 24
+            EGL_DEPTH_SIZE, 24,
+            EGL_RENDERABLE_TYPE, EGL_OPENGL_ES3_BIT,
+            EGL_NONE
+    };
+
+    EGLDisplay dsp = eglGetCurrentDisplay();
+    EGLConfig cfg;
+    int num_configs;
+    if (!eglChooseConfig(dsp, attribs, &cfg, 1, &num_configs)) {
+        printf("EGLBridge: Error couldn't get an EGL visual config: %s\n", eglGetError());
+    }
+    OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR{
+            XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR,
+            nullptr,
+            eglGetCurrentDisplay(),
+            cfg,
+            eglGetCurrentContext()
+    };
 }
 
 extern "C"
@@ -72,18 +102,6 @@ Java_net_kdt_pojavlaunch_MCXRLoader_setAndroidInitInfo(JNIEnv *env, jclass clazz
     };
 
     initializeLoader((const XrLoaderInitInfoBaseHeaderKHR *) &loaderInitInfoAndroidKhr);
-}
-
-extern "C"
-JNIEXPORT void JNICALL
-Java_net_kdt_pojavlaunch_MCXRLoader_setEGLGlobal(JNIEnv* env, jclass clazz, jlong ctx, jlong display, jlong cfg) {
-    OpenComposite_Android_GLES_Binding_Info = new XrGraphicsBindingOpenGLESAndroidKHR {
-            XR_TYPE_GRAPHICS_BINDING_OPENGL_ES_ANDROID_KHR,
-            nullptr,
-            (void*)display,
-            (void*)cfg,
-            (void*)ctx
-    };
 }
 
 static std::string load_file(const char *path) {

@@ -30,7 +30,7 @@ LOCAL_SRC_FILES := ./OpenOVR/OCOVR.a
 include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
-LOCAL_LDLIBS := -llog -landroid -lGLESv3 -lvulkan
+LOCAL_LDLIBS := -llog -landroid -lGLESv3 -lvulkan -lEGL
 LOCAL_CFLAGS := -DXR_USE_PLATFORM_ANDROID -DXR_USE_GRAPHICS_API_OPENGL_ES
 LOCAL_SHARED_LIBRARIES := openxr_loader
 LOCAL_WHOLE_STATIC_LIBRARIES := ocovr
@@ -60,7 +60,6 @@ LOCAL_LDLIBS := -ldl -llog -landroid -lGLESv2 -lEGL
 # -lGLESv2
 LOCAL_MODULE := pojavexec
 # LOCAL_CFLAGS += -DDEBUG
-LOCAL_SHARED_LIBRARIES := openvr_api
 # -DGLES_TEST
 LOCAL_SRC_FILES := \
     egl_bridge.c \

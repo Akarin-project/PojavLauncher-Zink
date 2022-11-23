@@ -17,7 +17,6 @@ public class MainActivity extends BaseMainActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        MCXRLoader.setEGLGlobal(JREUtils.getEGLContextPtr(), JREUtils.getEGLDisplayPtr(), JREUtils.getEGLConfigPtr());
         MCXRLoader.setAndroidInitInfo(this);
         MCXRLoader.launch(this);
         super.onCreate(savedInstanceState);
